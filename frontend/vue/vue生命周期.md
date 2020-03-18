@@ -1,12 +1,13 @@
 ```
 									 生命周期
 beforeCreate：
-            在实例初始化之后，数据观测(data observer)和 event/watcher事件配置 之前被调用，注意是 之前，						此时data、watcher、methods统统滴没有。
-            这个时候的vue实例还什么都没有，data中没有数据，但是$route对象是存在的，可以根据路由信息进行重			定向之类的操作。
+            在实例初始化之后，数据观测(data observer)和 event/watcher事件配置之前被调用，
+            注意是之前，此时data、watcher、methods统统滴没有。
+            这个时候的vue实例还什么都没有，data中没有数据，但是$route对象是存在的，可以根据路由信息进行重定向之类的操作。
 
 created：
-            在实例已经创建完成之后被调用。在这一步，实例已完成以下配置：数据观测，属性和方法的运
-            算， watch/event 事件回调。然而，挂载阶段还没开始，$el属性目前不可见。
+            在实例已经创建完成之后被调用。在这一步，实例已完成以下配置：数据观测，属性和方法的运算，watch/event 事件回调。
+            然而，挂载阶段还没开始，$el属性目前不可见。
             data已经有数据了  但是数据没有挂载到视图中，数据没有挂载在根节点
             此时 this.$data 可以访问，watcher、events、methods也出现了，若根据后台接口动态改变data和
             methods的场景下，可以使用。
@@ -53,5 +54,32 @@ vm.$el    获取根节点
 vm.$set(对象，属性，值)
 vm.$mount(el)
 vm.$destroy
+```
 
+```
+beforeCreate() {
+	console.log('beforeCreate')
+}
+created() {
+	console.log('created')
+}
+beforeMount() {
+	console.log('beforeMount')
+}
+mounted() {
+	console.log('mounted')
+}
+beforeRouteEnter(to: Route, from: Route, next: (vm: any) => void) {
+    console.log('beforeRouteEnter')
+    next((vm: any) => {
+    	console.log(vm)
+    })
+}
+
+Home.vue?42b8:36 beforeRouteEnter
+Home.vue?42b8:24 beforeCreate
+Home.vue?42b8:27 created
+Home.vue?42b8:30 beforeMount
+Home.vue?42b8:33 mounted
+Home.vue?42b8:38 VueComponent {_uid: 4, _isVue: true, $options: {…}, _renderProxy: Proxy, _self: VueComponent, …}$attrs: (...)$listeners: (...)input: (...)$data: (...)$props: (...) ...}
 ```
