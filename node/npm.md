@@ -14,3 +14,25 @@
 
 添加到 `package.json` 文件 `devDependencies` 键下，开发时的依赖比如安装 `js` 的压缩包 `gulp-uglify` 因为我们在发布后用不到它，而只是在我们开发才用到它。
 
+
+
+```
+npm
+修改 npm 全局缓存目录
+npm config set cache "D:\Program Files\npm-cache"
+修改 npm 全局安装目录（需要加入系统变量）
+npm config set prefix "D:\Program Files\npm_global"
+```
+
+
+
+```
+yarn
+修改 yarn 全局安装位置
+yarn config  set global-folder "D:\Software\yarn\global"
+修改 yarn 缓存位置
+yarn config set cache-folder "D:\Software\yarn\cache"
+修改 yarn 可执行文件的链接位置
+yarn config set prefix <filepath> 不要带bin
+```
+
