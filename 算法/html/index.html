@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <meta name="keywords" content="关键词" />
+    <meta name="description" content="描述" />
+    <meta name="author" content="Sneaker" />
+    <style>
+      body {
+        font-family: "Microsoft YaHei", serif;
+      }
+
+      body,
+      dl,
+      dd,
+      p,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        margin: 0;
+      }
+
+      ol,
+      ul,
+      li {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      img {
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="result"></div>
+    <div class="result"></div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      function isDate(val) {
+        return toString.call(val) === "[object Date]";
+      }
+      function isPlainObject(val) {
+        return toString.call(val) === "[object Object]";
+      }
+      function encode(val) {
+        return encodeURIComponent(val)
+          .replace(/%40/g, "@")
+          .replace(/%3A/gi, ":")
+          .replace(/%24/g, "$")
+          .replace(/%2C/gi, ",")
+          .replace(/%20/g, "+")
+          .replace(/%5B/gi, "[")
+          .replace(/%5D/gi, "]");
+      }
+      function buildURL(url, params) {
+        if (!params) {
+          return url;
+        }
+        const parts = [];
+        Object.keys(params).forEach(key => {
+          let val = params[key];
+          if (val === null || typeof val === "undefined") {
+            return;
+          }
+          let values;
+          if (Array.isArray(val)) {
+            values = val;
+            key += "[]";
+          } else {
+            values = [val];
+          }
+          values.forEach(val => {
+            if (isDate(val)) {
+              val = val.toISOString();
+            } else if (isPlainObject(val)) {
+              val = JSON.stringify(val);
+            }
+            parts.push(`${encode(key)}=${encode(val)}`);
+          });
+        });
+        let serializedParams = parts.join("&");
+        if (serializedParams) {
+          const markIndex = url.indexOf("#");
+          if (markIndex !== -1) {
+            url = url.slice(0, markIndex);
+          }
+          url += (url.indexOf("?") === -1 ? "?" : "&") + serializedParams;
+        }
+        return url;
+      }
+      function transformRequest(data) {
+        return isPlainObject(data) ? JSON.stringify(data) : data;
+      }
+      function ajax(config, successCallback, failedCallback) {
+        const method = config.method || "get";
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4) {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              successCallback && successCallback(xhr); // 请求成功
+            } else {
+              failedCallback && failedCallback(xhr); // 请求失败
+            }
+          }
+        };
+        if (method.toLowerCase() === "get") {
+          const url = buildURL(config.url, config.params);
+          xhr.open(method, url, false); // true:异步 | false:同步
+          xhr.send();
+        } else if (method.toLowerCase() === "post") {
+          xhr.open(config.method, config.url, false);
+          xhr.setRequestHeader(
+            "Content-Type",
+            "application/json;charset=utf-8"
+          );
+          xhr.send(transformRequest(config.data));
+        }
+      }
+      function $(name) {
+        return document.getElementsByClassName(name);
+      }
+      ajax(
+        {
+          url: "http://localhost:3000/api/app/hello",
+          params: {
+            a: [1,2,3,4],
+            "@#$%^&*()_+-={}": "喜欢?!@#$%^&*()_+-={}|:\">?<;'",
+            牛逼: "不客气"
+          }
+        },
+        xhr => {
+          $("result")[0].textContent = xhr.responseText;
+          console.log("获取请求页面");
+        }
+      );
+      ajax(
+        {
+          url: "http://localhost:3000/api/app/hello",
+          method: "post",
+          data: {
+            a: [1,2,3,4],
+            "@#$%^&*()_+-={}": "喜欢?!@#$%^&*()_+-={}|:\">?<;'",
+            牛逼: "不客气"
+          }
+        },
+        xhr => {
+          $("result")[1].textContent = xhr.responseText;
+        }
+      );
+    </script>
+  </body>
+</html>
