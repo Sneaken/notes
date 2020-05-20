@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      .father {
+        border: 1px solid black;
+        background-color: deeppink;
+      }
+      .father::after{
+        clear: both;
+        content: '';
+        display: block;
+      }
+      .a,.b,.c,.d,.e{
+        float: left;
+      }
+      .a {
+        background-color: #234;
+        width: 25%;
+        height:25px
+      }
+      .b {
+        background-color: #456;
+        width: 25%;
+        height: 50px
+      }
+      .c {
+        background-color: #678;
+        width: 25%;
+        height: 75px
+      }
+      .d {
+        background-color: #abd;
+        width: 25%;
+        height: 100px
+      }
+      .e {
+        background-color: #abd;
+        width: 25%;
+        height: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="father">
+      <div class="a"></div>
+      <div class="b"></div>
+      <div class="c"></div>
+      <div class="d"></div>
+      <div class="e"></div>
+    </div>
+  </body>
+</html>
