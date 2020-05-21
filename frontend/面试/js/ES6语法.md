@@ -351,4 +351,4 @@ Proxy 支持的拦截操作一览，一共 13 种。
 
 13. construct(target, args)：拦截 Proxy 实例作为构造函数调用的操作，比如 new proxy(...args)。
 
-# Promise
+# 十、Promise 见 promise.md
