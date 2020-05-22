@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "test": "promises-aplus-tests promise.js"
+  },
+  "dependencies": {
+    "promises-aplus-tests": "^2.1.2"
+  }
+}
