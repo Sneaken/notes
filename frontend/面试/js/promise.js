@@ -14,8 +14,9 @@ class APromise {
     this.onResolvedCallbacks = [];
     this.onRejectedCallbacks = [];
 
-    const resolve = (value) => {
+    const resolve = value => {
       if (value instanceof APromise) {
+        // 2.3.2
         value.then(resolve, reject);
         return;
       }
@@ -25,18 +26,18 @@ class APromise {
           this.state = FULFILLED;
           this.data = value;
           // 如无以下方法，则无法处理异步操作
-          this.onResolvedCallbacks.forEach((callback) => callback(value));
+          this.onResolvedCallbacks.forEach(callback => callback(value));
         }
       }, 0); // 2.2.4 onFulfilled or onRejected must not be called until the execution context stack contains only platform code.
     };
-    const reject = (reason) => {
+    const reject = reason => {
       // 当是pending时 改变状态
       setTimeout(() => {
         if (this.state === PENDING) {
           this.state = REJECTED;
           this.data = reason;
           // 如无以下方法，则无法处理异步操作
-          this.onRejectedCallbacks.forEach((callback) => callback(reason));
+          this.onRejectedCallbacks.forEach(callback => callback(reason));
         }
       }, 0);
     };
@@ -50,11 +51,11 @@ class APromise {
 
   then(onFulfilled, onRejected) {
     onFulfilled =
-      typeof onFulfilled === "function" ? onFulfilled : (value) => value; // 2.2.1.1 | 2.2.7.3
+      typeof onFulfilled === "function" ? onFulfilled : value => value; // 2.2.1.1 | 2.2.7.3
     onRejected =
       typeof onRejected === "function"
         ? onRejected
-        : (reason) => {
+        : reason => {
             throw reason;
           }; // 2.2.1.2 | 2.2.7.4
 
@@ -82,27 +83,24 @@ class APromise {
         }, 0); // 2.2.3.2
       });
     } else if (this.state === PENDING) {
+      // 这边需要加深印象
       promise2 = new APromise((resolve, reject) => {
-        this.onResolvedCallbacks.push((value) => {
-          setTimeout(() => {
-            try {
-              const x = onFulfilled(value);
-              resolvePromise(promise2, x, resolve, reject);
-            } catch (error) {
-              reject(error);
-            }
-          }, 0);
+        this.onResolvedCallbacks.push(value => {
+          try {
+            const x = onFulfilled(value);
+            resolvePromise(promise2, x, resolve, reject);
+          } catch (error) {
+            reject(error);
+          }
         });
 
-        this.onRejectedCallbacks.push((reason) => {
-          setTimeout(() => {
-            try {
-              const x = onRejected(reason);
-              resolvePromise(promise2, x, resolve, reject);
-            } catch (error) {
-              reject(error);
-            }
-          }, 0);
+        this.onRejectedCallbacks.push(reason => {
+          try {
+            const x = onRejected(reason);
+            resolvePromise(promise2, x, resolve, reject);
+          } catch (error) {
+            reject(error);
+          }
         });
       });
     }
@@ -114,7 +112,7 @@ class APromise {
   }
 
   static resolve(value) {
-    return new APromise((resolve, reject) => {
+    return new APromise(resolve => {
       resolve(value);
     });
   }
@@ -130,7 +128,7 @@ class APromise {
       let values = [];
       let count = 0;
       promises.forEach((promise, index) => {
-        promise.then((value) => {
+        promise.then(value => {
           values[index] = value;
           count++;
           if (count === promises.length) {
@@ -143,7 +141,7 @@ class APromise {
 
   static race(promises) {
     return new APromise((resolve, reject) => {
-      promises.forEach((promise) => {
+      promises.forEach(promise => {
         promise.then(resolve, reject);
       });
     });
@@ -160,13 +158,14 @@ function resolvePromise(promise2, x, resolve, reject) {
 
   if (x instanceof APromise) {
     // 2.3.2
+    // 这边需要加深印象
     if (x.state === PENDING) {
       // 如果为等待态需等待直至 x 被执行或拒绝 并解析value值
       x.then(
-        (y) => {
+        y => {
           resolvePromise(promise2, y, resolve, reject);
         },
-        (e) => {
+        e => {
           reject(e);
         }
       ); // 2.3.2.1
@@ -180,12 +179,12 @@ function resolvePromise(promise2, x, resolve, reject) {
       if (typeof then === "function") {
         then.call(
           x,
-          (y) => {
+          y => {
             if (isCalled) return;
             isCalled = true;
             resolvePromise(promise2, y, resolve, reject); // 2.3.3.3.1
           },
-          (e) => {
+          e => {
             if (isCalled) return;
             isCalled = true;
             reject(e); // 2.3.3.3.3
@@ -205,9 +204,9 @@ function resolvePromise(promise2, x, resolve, reject) {
 }
 
 // 过 promise A 标准检测
-APromise.deferred = function () {
+APromise.deferred = function() {
   let def = {};
-  def.promise = new APromise(function (resolve, reject) {
+  def.promise = new APromise(function(resolve, reject) {
     def.resolve = resolve;
     def.reject = reject;
   });
@@ -216,7 +215,7 @@ APromise.deferred = function () {
 module.exports = APromise;
 // Promise核心内容完整测试方法
 let promisesAplusTests = require("promises-aplus-tests");
-promisesAplusTests(APromise, function (err) {
+promisesAplusTests(APromise, function(err) {
   console.log("err:", err);
   //全部完成;输出在控制台中。或者检查`err`表示失败次数。
 });
