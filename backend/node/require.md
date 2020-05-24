@@ -1,4 +1,4 @@
-```javascript
+```
 首先，文件命名最好不要出现空格 、点、中文等字符，并且建议全小写字符以免在不同的开发环境和系统环境下出错。
 require(模块名)
 	自定义模块 用 相对路径
@@ -14,7 +14,7 @@ const jsonData = require('./path/filename.json');
 const crypto = require('crypto');
 ```
 
-```javascript
+```
 require导入的模块是单独存放在一个作用域里面的
 模块缓存机制
 node 的 顶层对象是 global

@@ -1,6 +1,6 @@
 node接收文件需要包 multer
 
-```
+```js
 const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 router.use(upload.single("file"));
 
-req.file 就是接收的文件
+// req.file 就是接收的文件
 
 
 if(req.file){//上传的文件存在
