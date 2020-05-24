@@ -17,29 +17,26 @@ class APromise {
     const resolve = value => {
       if (value instanceof APromise) {
         // 2.3.2
-        value.then(resolve, reject);
+        value.then(resolve, reject); // Promise.resolve 递归解析resolve中的参数 直到不是promise对象
         return;
       }
-      // 当是pending时 改变状态
-      setTimeout(() => {
-        if (this.state === PENDING) {
-          this.state = FULFILLED;
-          this.data = value;
-          // 如无以下方法，则无法处理异步操作
-          this.onResolvedCallbacks.forEach(callback => callback(value));
-        }
-      }, 0); // 2.2.4 onFulfilled or onRejected must not be called until the execution context stack contains only platform code.
+      // 只在 pending 时,改变状态
+      if (this.state === PENDING) {
+        this.state = FULFILLED;
+        this.data = value;
+        // 如无以下方法，则无法处理异步操作
+        this.onResolvedCallbacks.forEach(callback => callback(value));
+      }
     };
     const reject = reason => {
-      // 当是pending时 改变状态
-      setTimeout(() => {
-        if (this.state === PENDING) {
-          this.state = REJECTED;
-          this.data = reason;
-          // 如无以下方法，则无法处理异步操作
-          this.onRejectedCallbacks.forEach(callback => callback(reason));
-        }
-      }, 0);
+      // 错误不需要递归解析
+      // 只在 pending 时,改变状态
+      if (this.state === PENDING) {
+        this.state = REJECTED;
+        this.data = reason;
+        // 如无以下方法，则无法处理异步操作
+        this.onRejectedCallbacks.forEach(callback => callback(reason));
+      }
     };
 
     try {
@@ -58,21 +55,20 @@ class APromise {
         : reason => {
             throw reason;
           }; // 2.2.1.2 | 2.2.7.4
-
     let promise2;
-    if (this.state === FULFILLED) {
-      promise2 = new APromise((resolve, reject) => {
+    return (promise2 = new APromise((resolve, reject) => {
+      if (this.state === FULFILLED) {
+        // 没有用 setTimeout 则 promise2 不存在 (new对象的执行过程)
         setTimeout(() => {
           try {
             const x = onFulfilled(this.data); // 2.2.7.1
             resolvePromise(promise2, x, resolve, reject);
           } catch (error) {
+            // 用了setTimeout 则不会走类里面的 try catch 45行
             reject(error); // 2.2.7.2
           }
-        }, 0); // 2.2.2.2
-      });
-    } else if (this.state === REJECTED) {
-      promise2 = new APromise((resolve, reject) => {
+        }, 0); // 2.2.4 | 2.2.2.2
+      } else if (this.state === REJECTED) {
         setTimeout(() => {
           try {
             const x = onRejected(this.data); // 2.2.7.1
@@ -80,31 +76,31 @@ class APromise {
           } catch (error) {
             reject(error); // 2.2.7.2
           }
-        }, 0); // 2.2.3.2
-      });
-    } else if (this.state === PENDING) {
-      // 这边需要加深印象
-      promise2 = new APromise((resolve, reject) => {
-        this.onResolvedCallbacks.push(value => {
-          try {
-            const x = onFulfilled(value);
-            resolvePromise(promise2, x, resolve, reject);
-          } catch (error) {
-            reject(error);
-          }
+        }, 0); // 2.2.4 | 2.2.3.2
+      } else if (this.state === PENDING) {
+        // 这边需要加深印象
+        this.onResolvedCallbacks.push(() => {
+          setTimeout(() => {
+            try {
+              const x = onFulfilled(this.data);
+              resolvePromise(promise2, x, resolve, reject);
+            } catch (error) {
+              reject(error);
+            }
+          }, 0);
         });
-
-        this.onRejectedCallbacks.push(reason => {
-          try {
-            const x = onRejected(reason);
-            resolvePromise(promise2, x, resolve, reject);
-          } catch (error) {
-            reject(error);
-          }
+        this.onRejectedCallbacks.push(() => {
+          setTimeout(() => {
+            try {
+              const x = onRejected(this.data);
+              resolvePromise(promise2, x, resolve, reject);
+            } catch (error) {
+              reject(error);
+            }
+          }, 0);
         });
-      });
-    }
-    return promise2;
+      }
+    }));
   }
 
   catch(onRejected) {
@@ -146,33 +142,42 @@ class APromise {
       });
     });
   }
+
+  // 无论结果如何都会执行
+  static finally(callback) {
+    return this.then(
+      value => {
+        return APromise.resolve(callback()).then(() => value);
+      },
+      reason => {
+        return APromise.resolve(callback()).then(() => {
+          throw reason;
+        });
+      }
+    );
+  }
 }
 
 function resolvePromise(promise2, x, resolve, reject) {
-  let isCalled = false; // 2.2.2.3 | 2.2.3.3 避免多次调用
+  let isCalled = false; // 2.2.2.3 | 2.2.3.3 避免其他库多次调用 resolve reject!
 
   if (promise2 === x) {
-    reject(new TypeError("循环引用")); // 2.3.1
+    reject(new TypeError("Chaining cycle detected for promise")); // 2.3.1
     return;
   }
-
+  // 为了能兼容其他符合 PromiseA+标准的promise 如: bluebird q es6-promise
   if (x instanceof APromise) {
-    // 2.3.2
+    // 2.3.2 可以不写，与 2.3.3 一个逻辑
     // 这边需要加深印象
-    if (x.state === PENDING) {
-      // 如果为等待态需等待直至 x 被执行或拒绝 并解析value值
-      x.then(
-        y => {
-          resolvePromise(promise2, y, resolve, reject);
-        },
-        e => {
-          reject(e);
-        }
-      ); // 2.3.2.1
-    } else {
-      x.then(resolve, reject); // 2.3.2.2 | 2.3.2.3
-    }
-  } else if (x !== null && (typeof x === "object" || typeof x === "function")) {
+    x.then(
+      y => {
+        resolvePromise(promise2, y, resolve, reject);
+      },
+      e => {
+        reject(e);
+      }
+    ); // 2.3.2.1
+  } else if ((x !== null && typeof x === "object") || typeof x === "function") {
     // 2.3.3
     try {
       let then = x.then; // 2.3.3.1
