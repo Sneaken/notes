@@ -144,7 +144,8 @@ class APromise {
   }
 
   // 无论结果如何都会执行
-  static finally(callback) {
+  // finally方法的回调函数不接受任何参数
+  finally(callback) {
     return this.then(
       value => {
         return APromise.resolve(callback()).then(() => value);
