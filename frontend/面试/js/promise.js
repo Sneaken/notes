@@ -107,6 +107,21 @@ class APromise {
     return this.then(null, onRejected);
   }
 
+  // 无论结果如何都会执行
+  // finally方法的回调函数不接受任何参数
+  finally(callback) {
+    return this.then(
+      value => {
+        return APromise.resolve(callback()).then(() => value);
+      },
+      reason => {
+        return APromise.resolve(callback()).then(() => {
+          throw reason;
+        });
+      }
+    );
+  }
+
   static resolve(value) {
     return new APromise(resolve => {
       resolve(value);
@@ -141,21 +156,6 @@ class APromise {
         promise.then(resolve, reject);
       });
     });
-  }
-
-  // 无论结果如何都会执行
-  // finally方法的回调函数不接受任何参数
-  finally(callback) {
-    return this.then(
-      value => {
-        return APromise.resolve(callback()).then(() => value);
-      },
-      reason => {
-        return APromise.resolve(callback()).then(() => {
-          throw reason;
-        });
-      }
-    );
   }
 }
 
