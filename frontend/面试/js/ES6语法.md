@@ -81,7 +81,7 @@ for (let i = 0; i < 3; i++) {
 
    ```js
    // IIFE 写法
-   (function () {
+   (function() {
      var tmp = "...";
      // ...
    })();
@@ -269,7 +269,7 @@ for (let i = 0; i < 3; i++) {
      const keyB = { b: 2 };
      const myObject = {
        [keyA]: "valueA",
-       [keyB]: "valueB",
+       [keyB]: "valueB"
      };
      myObject; // Object {[object Object]: "valueB"}
      ```
@@ -323,7 +323,7 @@ Proxy 支持的拦截操作一览，一共 13 种。
        console.log(target === source); // true
        console.log(receiver === proxy); // true
        return Reflect.get(target, propKey, receiver);
-     },
+     }
    });
    ```
 
