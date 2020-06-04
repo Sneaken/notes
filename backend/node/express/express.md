@@ -35,7 +35,7 @@ connect
 
 ```javascript
 //使用中间件来处理（格式化）请求中的数据
-var express = require('express');
+var express = require('backend/node/express/express');
 var app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -23,7 +23,7 @@ import '../static/css/global.css' /*引入公共样式*/
   </body>
 </html>
 ```
-3、在app.vue中引入，但是这样引入有一个问题，就是在index.html的HEADH上会多出一个空的<style></style>
+3、在app.vue中引入，但是这样引入有一个问题，就是在index.html的HEAD上会多出一个空的<style></style>
 ```
 <template>
   <div id="app">
