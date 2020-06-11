@@ -8,7 +8,7 @@ vm.\$attrs 是一个属性，其包含了父作用域中不作为 prop 被识别
 <template>
   <div>
     <el-button v-bind="$attrs">导出</el-button>
-  <div>
+  </div>
 </template>
 <!--父组件使用-->
 <my-button type='primary' size='mini'/>
@@ -23,17 +23,17 @@ vm.\$attrs 是一个属性，其包含了父作用域中不作为 prop 被识别
 
 自己封装的组件 组件内部要是没监听事件 则在外部监听的事件就无效，如：
 
-```html
+```vue
 <template>
-  <div>点击事件<div>
+  <div>点击事件</div>
 </template>
 <!--父组件使用-->
 <my-button @click="handleClick"/> <!--此时事件无效-->
 ```
 
-```html
+```vue
 <template>
-  <div @on="$listeners">点击事件<div> <!--并不一定要是顶部元素-->
+  <div @on="$listeners">点击事件</div> <!--并不一定要是顶部元素-->
   <!-- 这样也可以（在需要监听的元素上绑定就行）
     <div>
       <div @on="$listeners"></div>
