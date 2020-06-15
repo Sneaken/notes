@@ -326,4 +326,4 @@ bar.apply(obj2);    //2
 ```
 ### 换个角度理解
 
-如果像作者一样，大家也觉得上述四种方式不方便记忆，过一段时间后，又搞不明白 this 究竟指什么。那么我向大家推荐 Yehuda Katz 的这篇文章：[Understanding JavaScript Function Invocation and “this”](http://yehudakatz.com/2011/08/11/understanding-javascript-function-invocation-and-this/)。在这篇文章里，Yehuda Katz 将 apply 或 call 方式作为函数调用的基本方式，其他几种方式都是在这一基础上的演变，或称之为语法糖。Yehuda Katz 强调了函数调用时 this 绑定的过程，不管函数以何种方式调用，均需完成这一绑定过程，不同的是，作为函数调用时，this 绑定到全局对象；作为方法调用时，this 绑定到该方法所属的对象。
+如果像作者一样，大家也觉得上述四种方式不方便记忆，过一段时间后，又搞不明白 this 究竟指什么。那么我向大家推荐 Yehuda Katz 的这篇文章：[Understanding JavaScript Function Invocation and “this”](http://yehudakatz.com/2011/08/11/understanding-javascript-function-invocation-and-this) 。在这篇文章里，Yehuda Katz 将 apply 或 call 方式作为函数调用的基本方式，其他几种方式都是在这一基础上的演变，或称之为语法糖。Yehuda Katz 强调了函数调用时 this 绑定的过程，不管函数以何种方式调用，均需完成这一绑定过程，不同的是，作为函数调用时，this 绑定到全局对象；作为方法调用时，this 绑定到该方法所属的对象。
