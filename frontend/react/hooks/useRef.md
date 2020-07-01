@@ -59,3 +59,31 @@ export default function UseRefExample() {
   );
 }
 ```
+
+## ref 在组件上时
+```jsx
+import React, { useRef } from "react";
+
+const Box = React.forwardRef((props, ref) => {
+  return (
+    <div {...props} ref={ref}>
+      Box
+    </div>
+  );
+});
+
+ function App() {
+  const box = useRef();
+  return (
+    <div className="App">
+      <h1>Hello CodeSandbox</h1>
+      <Box
+        ref={box}
+        onClick={() => {
+          console.log(box.current);
+        }}
+      />
+    </div>
+  );
+}
+```
