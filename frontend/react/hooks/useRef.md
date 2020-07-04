@@ -61,6 +61,9 @@ export default function UseRefExample() {
 ```
 
 ## ref 在组件上时
+> 一个ref只能绑定一个组件
+>
+> 多个组件需要生成多个ref (或者通过 其父级代理 访问子节点)
 ```jsx
 import React, { useRef } from "react";
 
