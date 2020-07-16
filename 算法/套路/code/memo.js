@@ -44,16 +44,16 @@
 // console.timeEnd("带缓存时间");
 
 // 凑硬币问题
-function coinChange (coins, amount) {
-  const dp = Array(amount + 1).fill(amount + 1)
-  dp[0]    = 0
+function coinChange(coins, amount) {
+  const dp = Array(amount + 1).fill(amount + 1);
+  dp[0] = 0;
   dp.forEach((item, index) => {
     coins.forEach(coin => {
-      if (index - coin < 0) return
-      dp[index] = Math.min(dp[index], 1 + dp[index - coin])
-    })
-  })
-  return dp[amount] === amount + 1 ? -1 : dp[amount]
+      if (index - coin < 0) return;
+      dp[index] = Math.min(dp[index], 1 + dp[index - coin]);
+    });
+  });
+  return dp[amount] === amount + 1 ? -1 : dp[amount];
 }
 
-console.log(coinChange([1, 2, 5], 11))
+console.log(coinChange([1, 2, 5], 11));
