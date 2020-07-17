@@ -77,6 +77,8 @@ http {
         server_name        _; # 监听地址
         root               /usr/share/nginx/html;
         charset            utf-8; # 文件编码
+        index              index.html index.htm; # 默认读取这两个文件作为主页，否则需要输入详细的路径。
+        # random_index      on; # 随机选择一个文件做主页，默认关闭。# 有被这个坑到
 
         # Load configuration files for the default server block.
         include /etc/nginx/default.d/*.conf;
