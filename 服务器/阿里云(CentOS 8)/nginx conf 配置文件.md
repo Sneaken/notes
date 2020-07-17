@@ -97,6 +97,22 @@ http {
         }
     }
 
+    # 匹配 url 以 /front-end/ 开头，读取/home/front-end/ 相应目录下的文件
+    server {
+        listen      80;
+        charset     utf-8;
+        root        /home/front-end;
+
+        location / {
+          index index.html index.htm;
+        }
+
+        location /front-end/ {
+            rewrite ^/front-end/(.*)$ /$1 break;
+        }
+
+    }
+
 # Settings for a TLS enabled server.
 #
 #    server {
