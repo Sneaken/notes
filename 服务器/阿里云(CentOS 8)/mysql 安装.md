@@ -64,3 +64,33 @@ mysql> alter user 'root'@'%' identified with mysql_native_password by '密码' #
 mysql> grant all privileges on *.* to 'root'@'%'; # 赋权限
 mysql> flush privileges; # 刷新配置使生效
 ```
+
+## 查看端口
+
+```bash
+mysql> show global variables like 'port';
+
++---------------+-------+
+| Variable_name | Value |
++---------------+-------+
+| port          | 3306  |
++---------------+-------+
+1 row in set (0.01 sec)
+```
+
+## 修改默认端口
+
+```bash
+$ netstat -nltp # 检查端口
+
+
+$ vim /etc/my.cnf
+
+
+[mysqld]
+port=你想更换的端口号
+
+
+$ systemctl restart mysqld.service # 重启mysql服务
+$ netstat -nltp # 检查端口情况
+```
