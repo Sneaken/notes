@@ -2,9 +2,9 @@
 
 ​	尽管有 props 和 events ，但是有时仍然需要在 JavaScript 中直接访问子组件。为此可以使用 `ref` 为子组件指定一个索引 ID 。例如： 
 
-```javascript
+```html
 <div id="parent">
-	<user-profile ref="profile"></user-profile>
+	<user-profile ref="profile" />
 </div> 
 var parent = new Vue({ el: '#parent' })
 // 访问子组件
@@ -14,3 +14,9 @@ var child = parent.$refs.profile
 当 `ref` 和 `v-for` 一起使用时， ref 是一个数组或对象，包含相应的子组件（多个节点）。
 
 `$refs` 只在组件渲染完成后才填充，并且它是非响应式的。它仅仅作为一个直接访问子组件的应急方案——应当避免在模版或计算属性中使用 `$refs` 。 
+
+## 注意
+
+只有 `ref` 和 `v-for` 一起使用的时候 ref 才会是一个数组
+
+否则 `ref` 是会被覆盖的
