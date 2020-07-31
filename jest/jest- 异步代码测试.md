@@ -48,7 +48,8 @@
     
     ```js
     test("fetch data return ", () => {
-      fetchDataReturn().then(response => {
+      // 这边要加 return 否则很明显出问题了
+      return fetchDataReturn().then(response => {
         expect(response).toEqual({
           success: false
         });
