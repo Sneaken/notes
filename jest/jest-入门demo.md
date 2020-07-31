@@ -48,3 +48,42 @@ PASS  ./sum.test.js 正常应该看到这个
     Jest Documentation: facebook.github.io/jest/docs/configuration.html
     ```
 2. 这时候只能选择不用 git bash 做命令行。希望有人能补充下。
+
+
+## 使用 Babel
+
+```
+yarn add --dev babel-jest @babel/core @babel/preset-env
+```
+
+// babel.config.js
+```
+module.exports = {
+  presets: [
+    [
+      '@babel/preset-env',
+      {
+        targets: {
+          node: 'current',
+        },
+      },
+    ],
+  ],
+};
+```
+
+sum.js
+```js
+export function sum(a, b) {
+  return a + b;
+}
+```
+
+sum.test.js
+```js
+import { sum } from './sum'
+
+test('adds 1 + 2 to equal 3', () => {
+  expect(sum(1, 2)).toBe(3);
+});
+```
