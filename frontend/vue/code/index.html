@@ -8,17 +8,25 @@
   <title>Document</title>
 </head>
 <body>
+  <div id="app">
+    <h1>插值表达式</h1>
+    <h3>{{ msg }}</h3>
+    <h3>{{ count }}</h3>
+    <h1>v-text</h1>
+    <div v-text="msg"></div>
+    <h1>v-model</h1>
+    <input type="text" v-model="msg" />
+    <input type="text" v-model="count" />
+  </div>
   <script src="vue.js"></script>
   <script>
-    const app = new Vue({
+    let vm = new Vue({
+      el: "#app",
       data: {
-        test: 'I am test',
-        foo: {
-          bar: 'bar'
-        }
+        msg: "Hello Vue",
+        count: 100
       }
-    })
-    app.$data.test = 'hello world'
+    });
   </script>
 </body>
 </html>
