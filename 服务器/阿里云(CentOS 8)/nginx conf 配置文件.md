@@ -155,3 +155,18 @@ $ systemctl restart nginx.service
 # 不关闭服务柔和地重启(重新读取一次配置文件)
 $ systemctl reload nginx.service
 ```
+
+# 配置接口转发
+
+http://localhost:3001/api/(*) 转发到 http://localhost:3000/
+```
+server {
+    listen           3001; # 监听的端口号
+    listen           [::]:3001;
+    server_name      localhost;
+    location /api {
+        rewrite      ^/api/(.*)$ /$1 break;
+        proxy_pass   http://localhost:3000/;
+    }
+}
+```
