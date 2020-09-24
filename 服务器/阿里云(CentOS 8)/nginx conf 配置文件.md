@@ -170,3 +170,8 @@ server {
     }
 }
 ```
+## Tips
+
+在 window 环境下,路径和 window 路径保持一致
+
+如 D:/xxx/xxxs
