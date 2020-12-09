@@ -20,7 +20,12 @@ package.json
 yarn gloabl add stylelint stylelint-config-prettier stylelint-config-rational-order stylelint-config-standard stylelint-declaration-block-no-ignored-properties stylelint-order
 ```
 
+### git提交忽略文件
+
+  全局gitignore 添加 .stylelintrc.json
+
 ### webstorm file watchers 配置
+
 文件类型: less (这个可以看具体环境)
 程序：/(全局安装路径)/stylelint/bin/stylelint.js
 参数：$FileName$ --syntax less --fix
