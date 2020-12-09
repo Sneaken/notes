@@ -9,7 +9,7 @@ package.json
 {
   "scripts": {
     "lint-fix:style": "npm run lint:style -- --fix",
-    "lint:style": "stylelint 'src/**.*.less' --syntax less"
+    "lint:style": "stylelint 'src/**/*.less' --syntax less"
   }
 }
 ```
