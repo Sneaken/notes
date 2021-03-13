@@ -48,5 +48,9 @@ yarn gloabl add stylelint stylelint-config-prettier stylelint-config-rational-or
    字面意思文件无可执行权限
    chmod a+x $PATH(替换懂吧，do not ctrl c+v)
 
+3. webstorm file watchers: 程序可执行文件路径
+   
+   macOS: 选择node_modules/.bin/[程序]
+   win10: 选择node_modules/.bin/[程序.cmd]
 
 
