@@ -12,10 +12,10 @@
 1. cd $child
 2. yarn unlink
 3. cd $father
-4. yarn unlink $child 
-
+4. yarn unlink $child
 
 ## 当是 react 应用时，遇到警告
+
 ```
 Hooks can only be called inside the body of a function component.
 
@@ -37,7 +37,6 @@ Let’s look at each of these cases.
 4. yarn link react
 
 ```
-
 
 ## 本机所有注册的link
 
