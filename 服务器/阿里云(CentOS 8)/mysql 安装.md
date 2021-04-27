@@ -22,6 +22,11 @@ mysql> quit
 Bye
 ```
 
+方法二
+```
+mysqladmin -u用户名 -p旧密码 password 新密码
+```
+
 ## 用密码进入mysql命令行
 
 ```bash
