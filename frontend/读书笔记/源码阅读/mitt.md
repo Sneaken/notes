@@ -152,6 +152,7 @@ export default function mitt<Events extends Record<EventType, unknown>>(
       }
 
       // 这里还是比较专业的，如果要我实现这个库的功能的话，我可能会忽略这个功能
+      // 这样写的话还能省一个变量名
       handlers = all!.get('*');
       if (handlers) {
         // 这里必须类型断言，因为这边是要传两个参数
