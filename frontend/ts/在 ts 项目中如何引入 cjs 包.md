@@ -5,3 +5,14 @@
 ```
 import isDev = require('electron-is-dev');
 ```
+
+## 在 tsconfig.json 中配置以下字段
+
+"esModuleInterop": true
+
+即可使用
+
+```ts
+import isDev from 'electron-is-dev'
+```
+
