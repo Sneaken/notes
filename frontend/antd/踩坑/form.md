@@ -4,7 +4,7 @@
 
 2. form label 超出显示...
 
-```css
+```less
 .form {
   :global(.ant-form-item-label > label) {
     width: 100%;
@@ -21,5 +21,28 @@
       </div>
     }
   ></Form.Item>
+</Form>
+```
+
+```less
+.form {
+  :global(.ant-form-item-label > label) {
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 32px;
+  }
+}
+```
+
+```jsx
+<Form class="form">
+  <Form.Item
+    label={<span title="实验室名称">实验室名称</span>}
+  >
+    <Input/>
+  </Form.Item>
 </Form>
 ```
